@@ -2,7 +2,10 @@ name: Tests
 on: [push, pull_request]
 jobs:
   unit:
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -12,3 +15,4 @@ jobs:
       - run: python -m pip install -e '.[test]'
       - run: python -m unittest discover -s tests -v
       - run: python scripts/check_release.py
+      - run: python scripts/doctor.py --mode source

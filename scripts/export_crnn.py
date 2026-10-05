@@ -35,7 +35,8 @@ def main():
     model.eval()
     output = Path(config["Global"]["save_inference_dir"])
     output.mkdir(parents=True, exist_ok=True)
-    model = paddle.jit.to_static(model, input_spec=[paddle.static.InputSpec([None, 3, 48, 256], "float32")])
+    model = paddle.jit.to_static(model, input_spec=[paddle.static.InputSpec([None, 3, 48, 256], "float32")],
+                                full_graph=True)
     paddle.jit.save(model, str(output / "inference"))
     (output / "characters.txt").write_text("\n".join(characters) + "\n", encoding="utf-8")
     print("Exported CRNN [N, 3, 48, 256]:", output)

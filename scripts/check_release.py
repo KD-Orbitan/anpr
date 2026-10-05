@@ -5,10 +5,10 @@ import subprocess
 
 ROOT = Path(__file__).resolve().parents[1]
 TOP = {'README.md', '.gitignore', '.gitattributes', 'publication.json', 'pyproject.toml', 'requirements-cpu.txt',
-       'requirements-ocr-cpu.txt', 'api.py', 'app.py'}
+       'requirements-ocr-cpu.txt', 'requirements-training-cpu.txt', 'api.py', 'app.py'}
 DOCS = {'SETUP.md', 'MODEL_CARD.md', 'DATASET_CARD.md', 'THIRD_PARTY_NOTICES.md', 'PUBLICATION.md', 'CHOOSE_RELEASE_VI.md'}
 SCRIPTS = {'check_release.py', 'export_public.py', 'verify_assets.py', 'export_crnn.py',
-           'smoke_train.py', 'generate_example.py', 'release_profiles.py'}
+           'smoke_train.py', 'generate_example.py', 'release_profiles.py', 'doctor.py'}
 
 
 def allowed(path, profile='code-only'):

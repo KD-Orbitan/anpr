@@ -29,7 +29,7 @@ YOLO, PaddleOCR and the neural network architectures are reused components. This
 
 ## Quick start: source and tests
 
-Use Python **3.9** for the legacy Paddle 2.5 runtime. From the repository root:
+Use Python **3.9** for the Paddle 2.6.2 runtime. From the repository root:
 
 ```bash
 python -m venv .venv
@@ -43,7 +43,7 @@ python -m plateocr --help
 
 The test extra does not install Paddle or require model weights. The GitHub Actions workflow runs these tests; its remote status is only established after pushing and running the workflow.
 
-For OCR inference, install `requirements-ocr-cpu.txt`. For YOLO, Streamlit and the API, install `requirements-cpu.txt` in a separate runtime environment (the test extra uses headless OpenCV). These pins match the locally tested legacy runtime; fresh installation on every platform has not been verified.
+For OCR inference, install `requirements-ocr-cpu.txt`. For YOLO, Streamlit and the API, install `requirements-cpu.txt` in a separate runtime environment (the test extra uses headless OpenCV). The complete CPU stack was freshly installed and tested on Windows with Python 3.9 and Paddle 2.6.2. Other platforms have not been validated for the full runtime. Run `python scripts/doctor.py --mode app` to check your setup.
 
 ## Models and demo
 
@@ -57,7 +57,7 @@ python -m streamlit run app.py
 python -m uvicorn api:app --host 127.0.0.1 --port 8000
 ```
 
-The generated image is a fictional input for demonstrating the workflow, not an accuracy benchmark. The application supports user-supplied plate crops and vehicle images; `--detect` enables YOLO before OCR. The API accepts `POST /anpr` with `{"image_base64": "..."}` and returns all detected plates, text and separate detection/OCR confidence values.
+The generated image is a fictional input for demonstrating the workflow, not an accuracy benchmark. The application supports user-supplied plate crops and vehicle images; `--detect` enables YOLO before OCR. The API also offers `POST /ocr` for crops without detector weights. It accepts `POST /anpr` with `{"image_base64": "..."}` and returns all detected plates, text and separate detection/OCR confidence values.
 
 ## Training and evaluation
 
@@ -77,7 +77,7 @@ python -m plateocr register-model my-crnn EXPORT_RUN
 python -m plateocr evaluate --model my-crnn --manifest labels.txt --data-root images
 ```
 
-See [setup](docs/SETUP.md), [dataset card](docs/DATASET_CARD.md) and [model card](docs/MODEL_CARD.md). Training requires the local PaddleOCR dependencies in addition to the inference runtime. `--pretrained` starts a new fine-tune; `--resume` restores optimizer/epoch state. Do not edit a prepared run's config; prepare a new run.
+See [setup](docs/SETUP.md), [dataset card](docs/DATASET_CARD.md) and [model card](docs/MODEL_CARD.md). Install `requirements-training-cpu.txt` for CPU training and run `python scripts/doctor.py --mode training` to check dependencies. `--pretrained` starts a new fine-tune; `--resume` restores optimizer/epoch state. Do not edit a prepared run's config; prepare a new run.
 
 Evaluation reports full-plate exact-match accuracy and CER. Failed images remain in the denominator. OCR-on-crop performance is distinct from end-to-end ANPR performance. No company-test metrics are claimed in this public release while disclosure permission is unknown.
 
@@ -98,8 +98,8 @@ app.py / api.py       Streamlit and FastAPI entry points
 
 ## Validation and limitations
 
-The public source was cloned into a separate directory and installed into a fresh Python 3.9 environment on Windows: **15 tests passed**, including API contracts, CTC decoding, portable manifests, dictionary integrity and release exclusions. The CLI and public-file check also passed without weights or datasets.
+The current suite passes **22 tests**, including API contracts, CTC decoding, portable manifests, dictionary integrity, publication-profile switching and release exclusions. Tests pass in both a minimal test environment and the fresh complete CPU environment on Windows. CI checks the source on Windows and Linux without private assets.
 
-The local project has additionally passed initial Streamlit rendering, inference with existing weights, and a small train → validation → export → reload integration test. That smoke test establishes execution, not model quality. A full new fine-tune, fresh installation of the complete training/inference stack across platforms and public hosting have not been completed.
+The complete CPU stack was installed into a new environment and passed dependency checks, existing-model loading, both API routes on a fictional image, initial Streamlit rendering, and a small train -> validation -> export -> reload integration test using public-source training data. Export uses the fixed `[N, 3, 48, 256]` input contract. These checks establish execution, not model quality. A complete new fine-tune and a new independent benchmark remain separate experiments; GPU training and full runtime installation on other platforms have not been verified.
 
 Original-code licensing and weight redistribution permissions remain to be selected/confirmed. Third-party licenses remain applicable: see [notices](docs/THIRD_PARTY_NOTICES.md). Do not publish local datasets, predictions or reports when preparing a release; use the allowlisted export described in [publication](docs/PUBLICATION.md).
