@@ -4,14 +4,14 @@ import re
 import subprocess
 
 ROOT = Path(__file__).resolve().parents[1]
-TOP = {'README.md', '.gitignore', '.gitattributes', 'pyproject.toml', 'requirements-cpu.txt',
+TOP = {'README.md', '.gitignore', '.gitattributes', 'publication.json', 'pyproject.toml', 'requirements-cpu.txt',
        'requirements-ocr-cpu.txt', 'api.py', 'app.py'}
-DOCS = {'SETUP.md', 'MODEL_CARD.md', 'DATASET_CARD.md', 'THIRD_PARTY_NOTICES.md', 'PUBLICATION.md'}
+DOCS = {'SETUP.md', 'MODEL_CARD.md', 'DATASET_CARD.md', 'THIRD_PARTY_NOTICES.md', 'PUBLICATION.md', 'CHOOSE_RELEASE_VI.md'}
 SCRIPTS = {'check_release.py', 'export_public.py', 'verify_assets.py', 'export_crnn.py',
-           'smoke_train.py', 'generate_example.py'}
+           'smoke_train.py', 'generate_example.py', 'release_profiles.py'}
 
 
-def allowed(path):
+def allowed(path, profile='code-only'):
     parts = path.parts
     name = path.as_posix()
     if '__pycache__' in parts or path.suffix == '.pyc':
@@ -21,20 +21,31 @@ def allowed(path):
     if parts[0] in ('plateocr', 'tests'):
         return path.suffix == '.py'
     if parts[0] == 'docs':
-        return len(parts) == 2 and parts[1] in DOCS
+        return len(parts) == 2 and (parts[1] in DOCS or (profile == 'full' and parts[1] == 'RESULTS.md'))
     if parts[0] == 'scripts':
         return len(parts) == 2 and parts[1] in SCRIPTS
     if name in ('configs/project.json', 'models/registry.json', 'models/characters.txt',
                 'data/README.md', 'reports/README.md', '.github/workflows/tests.yml', 'vendor/README.md'):
         return True
+    if name == 'configs/code-only-docs.json':
+        return profile == 'full'
     if parts[:2] == ('vendor', 'PaddleOCR'):
         return name in ('vendor/PaddleOCR/LICENSE', 'vendor/PaddleOCR/requirements.txt') or (
             len(parts) > 3 and parts[2] in ('ppocr', 'tools') and path.suffix == '.py')
     return False
 
 
+def profile_for(root):
+    marker = root / 'publication.json'
+    profile = __import__('json').loads(marker.read_text(encoding='utf-8'))['profile'] if marker.exists() else 'code-only'
+    if profile not in ('code-only', 'full'):
+        raise ValueError('Unknown publication profile')
+    return profile
+
+
 def files(root=ROOT):
-    return sorted(path for path in root.rglob('*') if path.is_file() and allowed(path.relative_to(root)))
+    profile = profile_for(root)
+    return sorted(path for path in root.rglob('*') if path.is_file() and allowed(path.relative_to(root), profile))
 
 
 def check(root=ROOT):
@@ -55,7 +66,7 @@ def check(root=ROOT):
     if (root / '.git').exists():
         result = subprocess.run(['git', '-C', str(root), 'ls-files', '-z'], capture_output=True, check=True)
         for value in result.stdout.decode('utf-8').split('\0'):
-            if value and not allowed(Path(value)):
+            if value and not allowed(Path(value), profile_for(root)):
                 errors.append('Non-public tracked file: ' + value)
     return errors
 

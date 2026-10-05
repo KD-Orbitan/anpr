@@ -4,6 +4,8 @@ A computer vision project focused on fine-tuning a **CRNN license plate recogniz
 
 **Release scope:** source code, tests and documentation. Model weights and raw datasets are not bundled. Company-provided evaluation material and results are not published. Inference requires authorized weights; data-free tests can run immediately.
 
+**Choose your publication scope:** [Hướng dẫn tiếng Việt: chỉ code hoặc code + OCR weights + số liệu tổng hợp](docs/CHOOSE_RELEASE_VI.md). Both previews can be built locally; nothing is pushed automatically.
+
 ```mermaid
 flowchart LR
     A[Vehicle image] --> B[YOLO detector]
