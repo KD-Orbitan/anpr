@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "models": {
+    "model5plus": {
+      "path": "models/model5plus",
+      "sha256": {
+        "inference.pdiparams": "19459e0f59ffc97f4038259dda00464696921381b3e2dd36dd1f98f35410bd2a",
+        "inference.pdiparams.info": "110c198f66cfbb2df090ac380efe6349cb7d9afbf02e9ccc23ec977a65da64cd",
+        "inference.pdmodel": "2fe82e6aa9893f54021f0e5c1040d19bcc6ec8db056b0345bbcbfebf14157382"
+      },
+      "image_shape": [
+        3,
+        48,
+        256
+      ],
+      "training_run": "unconfirmed",
+      "notes": "Do not infer accuracy from the folder name or attach a log to this export without evidence.",
+      "distribution": "Local authorized weights only; public redistribution not yet approved"
+    },
+    "model92": {
+      "path": "models/model92",
+      "sha256": {
+        "inference.pdiparams": "65faf98a8cc31cd00209ad28145a869cc75af62e1f5f77b120eec752d01b900e",
+        "inference.pdiparams.info": "db59b75beed354a9e73cb2e97d61157d9cf8055911659841f4538b84d57dcdc7",
+        "inference.pdmodel": "2fe82e6aa9893f54021f0e5c1040d19bcc6ec8db056b0345bbcbfebf14157382"
+      },
+      "image_shape": [
+        3,
+        48,
+        256
+      ],
+      "training_run": "unconfirmed",
+      "notes": "Do not infer accuracy from the folder name or attach a log to this export without evidence.",
+      "distribution": "Local authorized weights only; public redistribution not yet approved"
+    }
+  },
+  "dictionary_sha256": "b5281efa47ffd45dc50f2215a556d31e363f4ec5c33680e3e86f14e89b2aef50",
+  "detector": {
+    "sha256": "7b471be37843b22e88f77a64a9cfe1cc91fce9233224541499d8a2506729d4b3"
+  }
+}

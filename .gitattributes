@@ -1,0 +1,6 @@
+* text=auto eol=lf
+models/characters.txt -text
+*.pt -text
+*.pdparams -text
+*.pdmodel -text
+*.pdiparams -text

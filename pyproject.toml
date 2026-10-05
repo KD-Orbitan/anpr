@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "vn-plate-ocr"
+version = "0.1.0"
+description = "Reproducible Vietnamese license plate OCR and ANPR"
+requires-python = ">=3.9"
+dependencies = []
+
+[project.optional-dependencies]
+test = ["numpy==1.24.4", "opencv-python-headless==4.6.0.66", "fastapi==0.116.1", "httpx==0.28.1"]
+
+[project.scripts]
+plateocr = "plateocr.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["plateocr*"]

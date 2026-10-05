@@ -1,0 +1,5 @@
+# Verified local legacy baseline; use Python 3.9 for Paddle 2.5.
+numpy==1.24.4
+paddlepaddle==2.5.2
+opencv-python==4.6.0.66
+PyYAML==6.0.2

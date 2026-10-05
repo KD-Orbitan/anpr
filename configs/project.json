@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "paddleocr_root": "vendor/PaddleOCR",
+  "pretrained_checkpoint": "models/pretrained/crnn_base",
+  "data_root": "data/datasets/training",
+  "dictionary": "models/characters.txt",
+  "default_model": "model5plus",
+  "detector": "models/detector/model_detect_m.pt",
+  "image_shape": [
+    3,
+    48,
+    256
+  ],
+  "color_order": "BGR",
+  "max_text_length": 10,
+  "splits": {
+    "train": [
+      "gen_train.txt",
+      "real_train.txt"
+    ],
+    "val": [
+      "gen_val.txt",
+      "real_val.txt"
+    ],
+    "test": [
+      "gen_test.txt",
+      "real_test.txt"
+    ]
+  }
+}
