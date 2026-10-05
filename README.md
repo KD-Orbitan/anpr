@@ -96,6 +96,8 @@ app.py / api.py       Streamlit and FastAPI entry points
 
 ## Validation and limitations
 
-The local project has passed unit/API tests, initial Streamlit rendering, inference with existing weights, and a small train → validation → export → reload integration test. That smoke test establishes execution, not model quality. A full new fine-tune, clean-install verification across platforms and public hosting have not been completed.
+The public source was cloned into a separate directory and installed into a fresh Python 3.9 environment on Windows: **15 tests passed**, including API contracts, CTC decoding, portable manifests, dictionary integrity and release exclusions. The CLI and public-file check also passed without weights or datasets.
+
+The local project has additionally passed initial Streamlit rendering, inference with existing weights, and a small train → validation → export → reload integration test. That smoke test establishes execution, not model quality. A full new fine-tune, fresh installation of the complete training/inference stack across platforms and public hosting have not been completed.
 
 Original-code licensing and weight redistribution permissions remain to be selected/confirmed. Third-party licenses remain applicable: see [notices](docs/THIRD_PARTY_NOTICES.md). Do not publish local datasets, predictions or reports when preparing a release; use the allowlisted export described in [publication](docs/PUBLICATION.md).

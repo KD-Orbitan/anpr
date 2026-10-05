@@ -1,6 +1,6 @@
 # Data is not distributed with this repository
 
-Training/validation use public-source datasets according to the project author. Exact source URLs and redistribution terms still need to be documented; public accessibility alone is not a redistribution license.
+The author identifies [Vietnamese License Plate OCR on Kaggle](https://www.kaggle.com/datasets/topkek69/vietnamese-license-plate-ocr/data) as the training/validation source. Dataset version and redistribution terms still need verification; public accessibility alone is not a redistribution license.
 
 The company-provided external evaluation dataset is private. Do not include its images, labels, filenames, predictions, hashes or per-image results in a public commit. It is not required to run the application with your own images.
 
