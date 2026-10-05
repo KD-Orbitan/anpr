@@ -26,3 +26,8 @@ configs/*.local.json
 models/pretrained/provenance.json
 scripts/import_legacy.py
 scripts/record_evidence.py
+# Unused assets from the broader historical OCR engine are not release inputs.
+vendor/PaddleOCR/**/*.txt
+!vendor/PaddleOCR/requirements.txt
+vendor/PaddleOCR/**/*.md
+vendor/PaddleOCR/**/*.pyx
