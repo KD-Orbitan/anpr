@@ -31,3 +31,16 @@ class ApiTests(unittest.TestCase):
             self.assertEqual(response.status_code, 200)
             np.testing.assert_array_equal(factory.return_value.predict.call_args.args[0], image)
             self.assertEqual(response.json()["plates"][0]["text"], "30A12345")
+
+    def test_crop_endpoint_does_not_load_detector(self):
+        client = TestClient(app)
+        image = np.full((48, 256, 3), 125, dtype="uint8")
+        _, encoded = cv2.imencode(".png", image)
+        with patch("api.recognizer") as factory, patch("api.pipeline") as detector:
+            factory.return_value.predict.return_value = {"text": "00A00000", "confidence": 0.8}
+            response = client.post("/ocr", json={"image_base64": base64.b64encode(encoded).decode()})
+            self.assertEqual(response.status_code, 200)
+            self.assertEqual(response.json()["plate"]["text"], "00A00000")
+            np.testing.assert_array_equal(factory.return_value.predict.call_args.args[0], image)
+            detector.assert_not_called()
+        self.assertEqual(client.post("/ocr", json={"image_base64": "invalid"}).status_code, 400)

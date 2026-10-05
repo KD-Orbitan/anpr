@@ -9,7 +9,7 @@ import numpy as np
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 
-from plateocr.inference import Pipeline
+from plateocr.inference import Pipeline, Recognizer
 
 app = FastAPI(title="Vietnamese ANPR", version="0.1.0")
 lock = Lock()
@@ -24,13 +24,17 @@ def pipeline():
     return Pipeline()
 
 
+@lru_cache(maxsize=1)
+def recognizer():
+    return Recognizer()
+
+
 @app.get("/health")
 def health():
     return {"status": "ok", "model_loaded": bool(pipeline.cache_info().currsize)}
 
 
-@app.post("/anpr")
-def anpr(request: ImageRequest):
+def decode_image(request: ImageRequest):
     if len(request.image_base64) > 20 * 1024 * 1024:
         raise HTTPException(413, "Image payload is too large")
     try:
@@ -42,5 +46,19 @@ def anpr(request: ImageRequest):
             raise ValueError("Cannot decode image")
     except (ValueError, binascii.Error, cv2.error) as error:
         raise HTTPException(400, "Invalid base64 image") from error
+    return image
+
+
+@app.post("/ocr")
+def ocr(request: ImageRequest):
+    """Recognize an already cropped plate; no detector weights required."""
+    image = decode_image(request)
+    with lock:
+        return {"plate": recognizer().predict(image)}
+
+
+@app.post("/anpr")
+def anpr(request: ImageRequest):
+    image = decode_image(request)
     with lock:
         return {"plates": pipeline().predict(image)}
