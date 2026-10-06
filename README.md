@@ -1,8 +1,18 @@
 # Vietnamese License Plate OCR & ANPR
 
+[![Tests](https://github.com/KD-Orbitan/anpr/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/KD-Orbitan/anpr/actions/workflows/tests.yml)
+
 A computer vision project focused on fine-tuning a **CRNN license plate recognizer**, integrating it with an existing YOLO detector, and making experiments reproducible.
 
 **Release scope:** source code, tests and documentation. Model weights and raw datasets are not bundled. Company-provided evaluation material and results are not published. Inference requires authorized weights; data-free tests can run immediately.
+
+**Stack:** Python · PaddlePaddle · PaddleOCR · PyTorch/YOLO · OpenCV · FastAPI · Streamlit.
+
+## Review this project
+
+Start with the [engineering walkthrough](docs/ENGINEERING.md) for the problem, design decisions and evidence. The [model card](docs/MODEL_CARD.md) describes the OCR contract and limitations; the [dataset card](docs/DATASET_CARD.md) explains data separation and provenance. To inspect the implementation, start at [inference](plateocr/inference.py), [training](plateocr/training.py) and [evaluation](plateocr/evaluation.py).
+
+You can clone this release and run its tests without access to the author's data or models. To run real inference or training, supply authorized assets as described in [setup](docs/SETUP.md). This code release does not claim a public accuracy benchmark.
 
 **Choose your publication scope:** [Hướng dẫn tiếng Việt: chỉ code hoặc code + OCR weights + số liệu tổng hợp](docs/CHOOSE_RELEASE_VI.md). Both previews can be built locally; nothing is pushed automatically.
 
@@ -32,6 +42,8 @@ YOLO, PaddleOCR and the neural network architectures are reused components. This
 Use Python **3.9** for the Paddle 2.6.2 runtime. From the repository root:
 
 ```bash
+git clone https://github.com/KD-Orbitan/anpr.git
+cd anpr
 python -m venv .venv
 # Linux/macOS: source .venv/bin/activate
 # Windows PowerShell: .\.venv\Scripts\Activate.ps1
@@ -41,7 +53,7 @@ python scripts/check_release.py
 python -m plateocr --help
 ```
 
-The test extra does not install Paddle or require model weights. The GitHub Actions workflow runs these tests; its remote status is only established after pushing and running the workflow.
+The test extra does not install Paddle or require model weights. The badge above links to the actual Windows/Linux CI results. For bug reports and changes, see [contributing](CONTRIBUTING.md).
 
 For OCR inference, install `requirements-ocr-cpu.txt`. For YOLO, Streamlit and the API, install `requirements-cpu.txt` in a separate runtime environment (the test extra uses headless OpenCV). The complete CPU stack was freshly installed and tested on Windows with Python 3.9 and Paddle 2.6.2. Other platforms have not been validated for the full runtime. Run `python scripts/doctor.py --mode app` to check your setup.
 
