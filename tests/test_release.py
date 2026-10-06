@@ -31,4 +31,5 @@ class ReleaseTests(unittest.TestCase):
                 root = Path(directory)
                 (root / 'labels.txt').write_text('images/synthetic.jpg\t00A00000\n', encoding='utf-8')
                 record = read_manifest(root / 'labels.txt', root)[0]
-                self.assertEqual(Path(record['image']).parent, root / 'images')
+            # Windows runners may expose TEMP through its DOS 8.3 alias.
+            self.assertEqual(Path(record['image']).parent, (root / 'images').resolve())
