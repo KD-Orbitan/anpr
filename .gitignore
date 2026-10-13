@@ -16,6 +16,7 @@ reports/*
 docs/legacy_configs/
 docs/AUDIT.md
 docs/EXPERIMENTS.md
+docs/CHOOSE_RELEASE_VI.md
 .private/
 dist/
 build/
