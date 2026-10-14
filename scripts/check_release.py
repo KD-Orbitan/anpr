@@ -27,7 +27,7 @@ def allowed(path, profile='code-only'):
     if name in ('configs/project.json', 'models/registry.json', 'models/characters.txt',
                 'data/README.md', 'reports/README.md', '.github/workflows/tests.yml', 'vendor/README.md'):
         return True
-    if name == 'configs/code-only-docs.json':
+    if name in ('configs/code-only-docs.json', 'configs/full-release-readme.md'):
         return profile == 'full'
     if parts[:2] == ('vendor', 'PaddleOCR'):
         return name in ('vendor/PaddleOCR/LICENSE', 'vendor/PaddleOCR/requirements.txt') or (

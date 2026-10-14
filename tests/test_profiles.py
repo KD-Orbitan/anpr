@@ -78,6 +78,25 @@ class ProfileTests(unittest.TestCase):
         from check_release import allowed
         self.assertFalse(allowed(Path('docs/RESULTS.md')))
         self.assertTrue(allowed(Path('docs/RESULTS.md'), 'full'))
+        self.assertFalse(allowed(Path('configs/full-release-readme.md')))
+        self.assertTrue(allowed(Path('configs/full-release-readme.md'), 'full'))
+
+    def test_full_readme_renders_metrics_from_the_summary(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / 'configs').mkdir()
+            (root / 'configs/full-release-readme.md').write_text(
+                'Results:\n{{RESULTS_TABLE}}\n', encoding='utf-8')
+            summary = {'evaluations': [
+                {'model': 'model92', 'exact_accuracy': 0.9298, 'cer': 0.0118,
+                 'correct': 371, 'samples': 399}
+            ]}
+            rendered = profiles.render_full_readme(root, summary)
+            self.assertIn('| `model92` | 92.98% | 1.18% | 371 / 399 |', rendered)
+            (root / 'configs/full-release-readme.md').write_text(
+                'Results without a table placeholder', encoding='utf-8')
+            with self.assertRaises(ValueError):
+                profiles.render_full_readme(root, summary)
 
     def test_paths_cannot_escape_bundle(self):
         with tempfile.TemporaryDirectory() as tmp:

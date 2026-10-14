@@ -73,6 +73,18 @@ def summaries(root, input_path, registry):
             'evaluations': output}
 
 
+def render_full_readme(root, summary):
+    template = (root / 'configs/full-release-readme.md').read_text(encoding='utf-8')
+    rows = [
+        f"| `{row['model']}` | {row['exact_accuracy']:.2%} | {row['cer']:.2%} | "
+        f"{row['correct']} / {row['samples']} |"
+        for row in summary['evaluations']
+    ]
+    if '{{RESULTS_TABLE}}' not in template:
+        raise ValueError('Full-release README is missing its results-table placeholder')
+    return template.replace('{{RESULTS_TABLE}}', '\n'.join(rows))
+
+
 def build(profile, root=ROOT):
     if profile not in ('code-only', 'full'):
         raise ValueError('Unknown profile')
@@ -129,22 +141,7 @@ def build(profile, root=ROOT):
         for row in summary['evaluations']:
             rows.append(f"| {row['model']} | {row['color_order']} | {row['min_width']} | {row['samples']} | {row['correct']} | {row['exact_accuracy']:.2%} | {row['cer']:.2%} |")
         (source / 'docs/RESULTS.md').write_text('\n'.join(rows) + '\n', encoding='utf-8')
-        (source / 'README.md').write_text(
-            '# Vietnamese License Plate OCR — extended release\n\n'
-            'This source profile accompanies separately distributed OCR weights and aggregate evaluation results. '
-            'Publish it only after confirming code, OCR-weight and aggregate-result permissions, plus applicable third-party terms.\n\n'
-            'See [aggregate results](docs/RESULTS.md), [setup](docs/SETUP.md), '
-            '[model card](docs/MODEL_CARD.md) and [dataset card](docs/DATASET_CARD.md).\n\n'
-            'Download `ocr-models.zip` from this repository’s approved GitHub Release, extract into the repository root, '
-            'then install `requirements-ocr-cpu.txt`. Run `python scripts/generate_example.py` and '
-            '`python -m plateocr infer data/examples/fictional_plate.png --model model92`.\n\n'
-            'The OCR archive contains model92, model5plus and their dictionary. It does not contain YOLO weights, '
-            'the original pretrained checkpoint, datasets, private labels or per-image predictions. '
-            'Full vehicle-image detection requires a separately authorized detector.\n\n'
-            'Architecture: BGR input [3, 48, 256] → MobileNetV3 → BiLSTM → CTC. '
-            'The project provides dataset auditing, traceable train/eval/export commands, CLI, Streamlit and FastAPI.\n\n'
-            'Run `python -m pip install -e ".[test]"` and `python -m unittest discover -s tests -v` for data-free tests. '
-            'The synthetic example is not a quality benchmark.\n', encoding='utf-8')
+        (source / 'README.md').write_text(render_full_readme(root, summary), encoding='utf-8')
         # Existing cards carry conservative context; add the profile-specific distribution clarification.
         for name in ('SETUP.md', 'MODEL_CARD.md', 'DATASET_CARD.md'):
             path = source / 'docs' / name
