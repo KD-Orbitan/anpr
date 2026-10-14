@@ -1,3 +1,5 @@
+> Extended profile: OCR weights are separate release attachments; company data stays private.
+
 # Model card
 
 ## Task and architecture
@@ -24,4 +26,4 @@ Weights are not bundled or downloaded automatically. Redistribution permissions 
 
 Report full-plate exact match and character error rate (CER) separately from detector or end-to-end ANPR metrics. Confidence is not accuracy. Training smoke-test results only verify execution and are not quality estimates.
 
-Company-data metrics are withheld pending permission. See the dataset card for the author's independent-test description and an outstanding historical Eval-reference question. Blurred, occluded, tilted or unfamiliar plate layouts can produce errors; the current vocabulary does not cover every possible identifier.
+This extended profile includes aggregate metrics in RESULTS.md after permission confirmation. See the dataset card for the author's independent-test description and an outstanding historical Eval-reference question. Blurred, occluded, tilted or unfamiliar plate layouts can produce errors; the current vocabulary does not cover every possible identifier.

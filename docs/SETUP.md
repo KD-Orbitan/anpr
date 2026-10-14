@@ -1,3 +1,5 @@
+> Extended profile: OCR weights are separate release attachments; company data stays private.
+
 # Setup and local assets
 
 ## Supported workflow
@@ -19,7 +21,7 @@ models/model5plus/inference.pdiparams
 models/pretrained/crnn_base.pdparams
 ```
 
-The last file is for training. Inference uses the selected OCR model and, for full ANPR, the detector. `scripts/verify_assets.py` compares the supplied historical inference files against `models/registry.json`. There is no public model URL while redistribution permission remains unknown. Do not substitute arbitrary binaries under the historical names.
+The last file is for training. Inference uses the selected OCR model and, for full ANPR, the detector. `scripts/verify_assets.py` compares the supplied historical inference files against `models/registry.json`. For an authorized extended release, obtain the OCR archive from its GitHub Release attachments. Do not substitute arbitrary binaries under the historical names.
 
 After training/export, `register-model NEW_NAME EXPORT_RUN` copies the export under a new name and records provenance and hashes. Select it with `--model NEW_NAME`; use the project configuration to change the app default.
 

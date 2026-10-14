@@ -1,3 +1,5 @@
+> Extended profile: OCR weights are separate release attachments; company data stays private.
+
 # Dataset card
 
 ## Training and validation
@@ -12,4 +14,4 @@ The author identifies the company-provided dataset as an independent final test 
 
 A historical configuration references part of this dataset in its Eval section. This does not establish that its images were used for gradient training. However, whether that run influenced checkpoint/model selection must be reconciled before claiming a strictly untouched holdout for every historical model. The public repository does not make that blanket claim.
 
-No private labels, sample filenames or image hashes are needed for installation, unit tests or inference on user-provided images. Aggregate company-dataset metrics are withheld pending permission.
+No private labels, sample filenames or image hashes are needed for installation, unit tests or inference on user-provided images. This extended profile provides reviewed aggregate metrics in RESULTS.md when permission is confirmed.
